@@ -1,66 +1,83 @@
 package org.launchcode.techjobs_oo.Tests;
-
+import org.junit.Before;
 import org.junit.Test;
 import org.launchcode.techjobs_oo.*;
 import static org.junit.Assert.*;
-
 public class JobTest {
-    Job test_job1 = new Job();
-    Job test_job2 = new Job();
-    Job test_job3 = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
-    Job test_job4 = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
-    Job test_job5 = new Job("Product tester", new Employer(""), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
-    //Verifies that two created objects do not share the same ID
-    @Test
-    public void testSettingJobId(){
-        assertTrue(test_job1.getId() +1 == test_job2.getId());
+    Job testClass1;
+    Job testClass2;
+    Job testClassFull;
+    @Before
+    public void Job() {
+        testClass1 = new Job();
+        testClass2 = new Job();
+        testClassFull = new Job("Product tester", new Employer("ACME"),
+                new Location("Desert"), new PositionType("Quality control"),
+                new CoreCompetency("Persistence"));
     }
-
-
-    //Verifies that the Job class correctly initializes all fields
     @Test
-    public void testJobConstructorSetsAllFields(){
-
-        assertEquals(23,test_job3.getId());
-        assertEquals("Product tester",test_job3.getName());
-        assertEquals("ACME", test_job3.getEmployer().toString());
-        assertEquals("Desert",test_job3.getLocation().toString());
-        assertEquals("Quality control",test_job3.getPositionType().toString());
-        assertEquals("Persistence",test_job3.getCoreCompetency().toString());
-    }
-
-    //Verifies that no two Job objects are equal due to the id being different
-    @Test
-    public void testJobsForEquality(){
-        assertFalse(test_job3.equals(test_job4));
-    }
-
-    //Verifies that blank lines are before and after the data returned by ToString
-    @Test
-    public void toStringInitialTest(){
-        String[] testJobStr = Job.toString(test_job4).split("\n");
-        assertTrue(testJobStr[0].isBlank());
-        assertTrue(testJobStr[testJobStr.length-1].isBlank());
-    }
-
-    //Verifies the toString method adds labels for each field in its return
-    @Test
-    public void toStringLabelTest(){
-        String testLabelString = Job.toString(test_job4);
-        assertTrue(testLabelString.contains("ID:"));
-        assertTrue(testLabelString.contains("Name:"));
-        assertTrue(testLabelString.contains("Employer:"));
-        assertTrue(testLabelString.contains("Location:"));
-        assertTrue(testLabelString.contains("Position Type:"));
-        assertTrue(testLabelString.contains("Core Competency:"));
+    public void testSettingJobId() {
+        int testClassOneIdPlusOne = testClass1.getId() + 1;
+        assertEquals(testClassOneIdPlusOne, testClass2.getId());
     }
 
     @Test
-    public void toStringEmptyFieldTest(){
-        String testEmptyString = Job.toString(test_job5);
-        assertTrue(testEmptyString.contains("Data not available"));
+    public void testJobConstructorSetsAllFields() {
+        assertTrue(testClassFull instanceof Job);
+        assertEquals("Product tester", testClassFull.getName());
+        assertEquals("ACME", testClassFull.getEmployer().getValue());
+        assertEquals("Desert", testClassFull.getLocation().getValue());
+        assertEquals("Quality control", testClassFull.getPositionType().getValue());
+        assertEquals("Persistence", testClassFull.getCoreCompetency().getValue());
     }
 
+    @Test
+    public void testJobForEquality() {
+        Job sameJobOne = testClassFull;
+        Job sameJobTwo = new Job("Product tester", new Employer("ACME"),
+                new Location("Desert"), new PositionType("Quality control"),
+                new CoreCompetency("Persistence"));
+        int sameJobOneId = sameJobOne.getId();
+        int sameJobTwoId = sameJobTwo.getId();
+        assertEquals(false, sameJobOneId == sameJobTwoId);
+    }
 
+    @Test
+    public void testJobForBlankLineBeforeAndAfterObject() {
+        Job testBlankLines = testClassFull;
+
+        String testBlankLinesString = testBlankLines.toString();
+        int indexOfLastChar = testBlankLinesString.length();
+        int indexOfSecondToLastChar = testBlankLinesString.length() - 1;
+        String lastTwoCharacters = testBlankLinesString.substring(indexOfSecondToLastChar, indexOfLastChar);
+
+        assertEquals("\n", testBlankLinesString.substring(0, 1));
+        assertEquals("\n", lastTwoCharacters);
+    }
+
+    @Test
+    public void testJobForContainsAllLabels() {
+        String testContainsLabel = testClassFull.toString();
+
+        assertTrue(testContainsLabel.contains("ID: " + testClassFull.getId() + "\n"));
+        assertTrue(testContainsLabel.contains("Name: " + testClassFull.getName() + "\n"));
+        assertTrue(testContainsLabel.contains("Employer: " + testClassFull.getEmployer() + "\n"));
+        assertTrue(testContainsLabel.contains("Location: " + testClassFull.getLocation() + "\n"));
+        assertTrue(testContainsLabel.contains("Position Type: " + testClassFull.getPositionType() + "\n"));
+        assertTrue(testContainsLabel.contains("Core Competency: " + testClassFull.getCoreCompetency() + "\n"));
+    }
+
+    @Test
+    public void testJobForEmptyField() {
+        Job emptyTestClass = new Job("", new Employer(""),
+                new Location(""), new PositionType(""),
+                new CoreCompetency(""));
+        String emptyTestClassString = emptyTestClass.toString();
+        assertTrue(emptyTestClassString.contains("Name: Data not available"));
+        assertTrue(emptyTestClassString.contains("Employer: Data not available"));
+        assertTrue(emptyTestClassString.contains("Location: Data not available"));
+        assertTrue(emptyTestClassString.contains("Position Type: Data not available"));
+        assertTrue(emptyTestClassString.contains("Core Competency: Data not available"));
+    }
 
 }
