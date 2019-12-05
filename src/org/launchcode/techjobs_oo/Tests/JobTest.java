@@ -50,7 +50,6 @@ public class JobTest {
         int indexOfLastChar = testBlankLinesString.length();
         int indexOfSecondToLastChar = testBlankLinesString.length() - 1;
         String lastTwoCharacters = testBlankLinesString.substring(indexOfSecondToLastChar, indexOfLastChar);
-
         assertEquals("\n", testBlankLinesString.substring(0, 1));
         assertEquals("\n", lastTwoCharacters);
     }
@@ -66,7 +65,6 @@ public class JobTest {
         assertTrue(testContainsLabel.contains("Position Type: " + testClassFull.getPositionType() + "\n"));
         assertTrue(testContainsLabel.contains("Core Competency: " + testClassFull.getCoreCompetency() + "\n"));
     }
-
     @Test
     public void testJobForEmptyField() {
         Job emptyTestClass = new Job("", new Employer(""),
